@@ -4,6 +4,8 @@
 float razaoAspecto = 16.0f / 9.0f, prev_wh, prev_ww;
 float max_x = 0, max_y = 0;
 
+GLuint x_mouse = 0, y_mouse = 0;
+
 keyboard_t keyboard = {0};
 
 // Callback para pressionamento do teclado
@@ -106,6 +108,14 @@ void keyboardFct(unsigned char key, int x, int y)
     }
 }
 
+void onMousePassiveMovement(int x , int y)
+{
+    x_mouse = x;
+    y_mouse = y;
+    // Recentraliza o ponteiro do mouse
+    // glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
+}
+
 // Callback para pressionamento de Teclas Especiais
 void keyboardSpecial(int key, int x, int y)
 {
@@ -184,7 +194,7 @@ void reshapeFct(int width, int height)
     max_x = 256 * razaoAspecto;
     max_y = 224;
 
-    glFrustum(-razaoAspecto, razaoAspecto, -1, 1, 1, 2300);
+    glFrustum(-razaoAspecto, razaoAspecto, -1, 1, 1, 3800);
     // glOrtho(-max_x, max_x, -max_y, max_y, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

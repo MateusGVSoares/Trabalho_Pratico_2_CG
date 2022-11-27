@@ -2,6 +2,8 @@
 #define __BODY__
 
 #include "Texturazer.h"
+#include "vec3f.h"
+#include <math.h>
 
 // Parâmetros:
 // Raio do corpo,

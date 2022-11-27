@@ -20,7 +20,7 @@ typedef struct Key
     int c;
     int v;
     int b;
-    int n; 
+    int n;
 } keyboard_t;
 
 extern keyboard_t keyboard;
@@ -30,7 +30,10 @@ extern keyboard_t keyboard;
 // MAX_Y
 extern float razaoAspecto, prev_wh, prev_ww, max_x, max_y;
 
+extern GLuint x_mouse, y_mouse;
+
 void keyboardFct(unsigned char key, int x, int y);
 void reshapeFct(int width, int height);
 void keyboardSpecial(int key, int x, int y);
+void onMousePassiveMovement(int x, int y);
 #endif

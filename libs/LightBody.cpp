@@ -122,10 +122,15 @@ void LightBody::draw()
     }
     else if (lighIsOn)
     {
+        this->interactWithLight = true;
         glLightfv(this->lightFont, GL_POSITION, this->lightSourcePos);
         glLightfv(this->lightFont, GL_AMBIENT, this->lightAmb);
         glLightfv(this->lightFont, GL_DIFFUSE, this->lightDif);
         glLightfv(this->lightFont, GL_SPECULAR, this->lightSpec);
+    }
+    else
+    {
+        this->interactWithLight = false;
     }
 
     glPushMatrix();

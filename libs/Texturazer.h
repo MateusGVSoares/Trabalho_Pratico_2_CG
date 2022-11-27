@@ -8,13 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <string.h>
-
-typedef struct vec3f
-{
-    float x;
-    float y;
-    float z;
-} vec3f_t;
+#include "vec3f.h"
 
 class Texturazer
 {

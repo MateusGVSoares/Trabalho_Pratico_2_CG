@@ -1,5 +1,5 @@
 #include "Body.h"
-#include <math.h>
+
 
 void solidSphere(int radius, int stacks, int columns)
 {

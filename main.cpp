@@ -8,10 +8,12 @@
 // Development libs
 #include "libs/SolarSystem.h"
 #include "libs/callback.h"
+#include "libs/Camera.h"
 
 #define FONTE GLUT_BITMAP_8_BY_13
 
 SolarSystem *sistemaSolar;
+Camera *main_camera;
 
 void printText(void *font, char *string)
 {
@@ -55,9 +57,7 @@ void drawUpdate()
     // z = origin.z +p*cos(θ)*cos(Φ)
     printInfo();
 
-    gluLookAt(0, 300, -320,
-              0, 0, 0,
-              0, 1, 0);
+    main_camera->use();
 
     sistemaSolar->drawSkyBox();
 
@@ -73,6 +73,7 @@ void onTimeUpdate(int param)
 {
     // Movimenta as esferas
     sistemaSolar->updateOnTime();
+    main_camera->updateCamera();
     glutPostRedisplay();
     glutTimerFunc(param, onTimeUpdate, param);
 }
@@ -93,7 +94,7 @@ void configGlut()
     glutKeyboardUpFunc(keyboardFct);
     glutSpecialFunc(keyboardSpecial);
     glutSpecialUpFunc(keyboardSpecial);
-
+    glutPassiveMotionFunc(onMousePassiveMovement);
     glutTimerFunc(16, onTimeUpdate, 16);
 
     glLineWidth(8);
@@ -128,6 +129,12 @@ void configOpenGl()
 
 void initGame()
 {
+    vec3f_t cam_origin = {
+        .x = 0,
+        .y = 300,
+        .z = -300};
+
+    main_camera = new Camera(cam_origin, 0.1);
     sistemaSolar = new SolarSystem("solarsystem.sscp");
 }
 
