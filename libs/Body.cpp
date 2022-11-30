@@ -1,6 +1,5 @@
 #include "Body.h"
 
-
 void solidSphere(int radius, int stacks, int columns)
 {
     // cria uma quádrica
@@ -29,6 +28,7 @@ Body::Body(const char *tex_name,
            double elipse_a,
            double elipse_b,
            int n_luas,
+           bool interactWithSound,
            bool interactWithLight)
 {
     this->origin = origin;
@@ -41,16 +41,11 @@ Body::Body(const char *tex_name,
     this->elipse_b = elipse_b;
     this->interactWithLight = interactWithLight;
     this->n_luas = n_luas;
-
+    this->interactWithSound = interactWithSound;
     this->transl_angle = 0;
     this->rot_angle = 0;
 
     this->texture = new Texturazer(tex_name);
-
-    // Muda o material do Body de acordo com os parametros da textura
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->texture->matDif);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, this->texture->matSpec);
-    glMaterialfv(GL_FRONT, GL_SHININESS, this->texture->matShine);
 }
 
 Body::~Body()
@@ -78,6 +73,11 @@ void Body::draw()
     // glColor3f(1.0, 1.0, 1.0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Muda o material do Body de acordo com os parametros da textura
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->texture->matDif);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, this->texture->matSpec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, this->texture->matShine);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, this->texture->loaded_textures[0]);
@@ -139,6 +139,11 @@ void Body::move()
     this->origin.x = mov_center.x + elipse_a * cos(transl_angle * M_PI / 180.0f);
     this->origin.y = 0;
     this->origin.z = mov_center.z + elipse_b * sin(transl_angle * M_PI / 180.0f);
+}
+
+bool Body::withSound()
+{
+    return this->interactWithSound;
 }
 
 vec3f_t *Body::getOrigin()

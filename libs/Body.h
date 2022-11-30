@@ -37,6 +37,7 @@ protected:
     double elipse_a;
     double elipse_b;
     GLuint interactWithLight;
+    bool interactWithSound;
 
 public:
     int n_luas;
@@ -49,12 +50,14 @@ public:
          double elipse_a,
          double elipse_b,
          int n_luas,
+         bool interactWithSound,
          bool interactWithLight);
     ~Body();
     virtual void draw();
     void move();
     void move(vec3f_t *aux_mov);
     bool isLight();
+    bool withSound();
     vec3f_t *getOrigin();
 };
 

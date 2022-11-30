@@ -1,12 +1,21 @@
 # Lista 3 Computação Gráfica
 
-![Print of The Code Working](print_working.png)
+
+# TODO
+- Fazer o sistema de som
+- Fazer o parser para modelo .obj
+- Impedir a nave de sair do sistema 
+- Criar uma textura ou modelo de nave 
+
 
 ## Integrantes:
 
--   Mateus Soares - Matrícula : 20223303314
+-   Mateus Soares   - Matrícula : 20223303314
 -   Matheus Menezes - Matrícula : 20223003234
--   Laura Pianetti - Matrícula : 20223002424
+-   Laura Pianetti  - Matrícula : 20223002424
+-   Adjailson       - Matrícula :
+-   Lucas           - Matrícula :
+-   Gustavo         - Matrícula :
 
 ## Bibliotecas Necessárias:
 

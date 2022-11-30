@@ -21,6 +21,7 @@ int SolarSystem::parseScript(const char *file_name)
     vec3f_t mov_origem = {0};
 
     GLint lightEmissor = 0,
+          interactWithSound = 0,
           interactWithLight = 0,
           n_luas = 0,
           n_astros = 0;
@@ -155,14 +156,14 @@ int SolarSystem::parseScript(const char *file_name)
         {
             printf(" -- Criou um corpo Luminoso \n");
             astros.push_back(std::make_shared<LightBody>(tex_name, mov_origem, radius, mov_origem, vel_rot,
-                                                         vel_trans, elipse_a, elipse_b, n_luas, lightAmb, lightDif, lightSpec, GL_LIGHT0 + n_fonts));
+                                                         vel_trans, elipse_a, elipse_b, n_luas, interactWithLight, lightAmb, lightDif, lightSpec, GL_LIGHT0 + n_fonts));
             n_fonts++;
         }
         else
         {
             printf(" -- Criou um corpo \n");
             astros.push_back(std::make_shared<Body>(tex_name, mov_origem, radius, mov_origem, vel_rot,
-                                                    vel_trans, elipse_a, elipse_b, n_luas, interactWithLight));
+                                                    vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight));
         }
 
         printf("Centro do Movimento : %0.2f %0.2f %0.2f \nRaio do Planeta : %0.2f \n A: %0.2f B: %0.2f \n VelRot: %0.2f | VelTrans: %0.2f\n Emissor de Luz : %d\n Numero de Luas : %d\n Interage com a luz:%d\n Script de Textura : %s\n",
@@ -245,9 +246,11 @@ void SolarSystem::drawSkyBox()
 
 void SolarSystem::updateOnDraw()
 {
+    vec3f_t aux;
 
     // Limpa o vetor de objetos que nao reagem a luz
-    nonReacting.clear();
+    aux_light.clear();
+    aux_sound.clear();
 
     // Desenha todos os objetos que reagem a luz
     glEnable(GL_LIGHTING);
@@ -260,14 +263,17 @@ void SolarSystem::updateOnDraw()
         }
         else
         {
-            nonReacting.push_back(astros[i].get());
+            aux_light.push_back(astros[i].get());
+        }
+
+        if (astros[i]->withSound())
+        {
+            aux_sound.push_back(astros[i].get());
         }
     }
     glDisable(GL_LIGHTING);
 
     // Desenha os objetos que nao reagem a luz
-    for (int i = 0; i < nonReacting.size(); i++)
-    {
-        nonReacting[i]->draw();
-    }
+    for (int i = 0; i < aux_light.size(); i++)
+        aux_light[i]->draw();
 }

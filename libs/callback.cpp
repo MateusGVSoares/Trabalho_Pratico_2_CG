@@ -105,7 +105,15 @@ void keyboardFct(unsigned char key, int x, int y)
         else
             keyboard.n = 1;
         break;
+     case 'l':
+    case 'L':
+        if (keyboard.l)
+            keyboard.l = 0;
+        else
+            keyboard.l = 1;
+        break;
     }
+
 }
 
 void onMousePassiveMovement(int x , int y)

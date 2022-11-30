@@ -16,14 +16,15 @@ private:
     std::vector<std::shared_ptr<Body>> astros;
 
     // Vetores de corpos que nao precisam de iteracao com a luz
-    std::vector<Body *> nonReacting;
+    std::vector<Body *> aux_light;
 
     // Stack para auxiliar na atualizacao do movimento dos astros
-   std::unique_ptr<std::stack<std::pair<vec3f_t,int>>> centerStack;
+    std::unique_ptr<std::stack<std::pair<vec3f_t, int>>> centerStack;
 
-   int skyBoxTexture;
+    int skyBoxTexture;
 
 public:
+    std::vector<Body *> aux_sound;
     SolarSystem(const char *script_name);
 
     // Parser para o script de sistema solar

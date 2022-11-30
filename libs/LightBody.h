@@ -26,6 +26,8 @@ public:
               double elipse_a,
               double elipse_b,
               int n_luas,
+              bool interactWithSound,
+              int interactWithLight,
               float *lightAmb,
               float *lightDif,
               float *lightSpec,

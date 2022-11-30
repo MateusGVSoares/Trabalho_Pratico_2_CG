@@ -9,7 +9,6 @@
 class Camera
 {
 private:
-    vec3f_t origin;
     double pitch; // Rotação no eixo Z
     double roll;  // Rotação no eixo X
     double yaw;   // Rotação no eixo y
@@ -17,7 +16,8 @@ private:
     vec3f_t direction;
 
 public:
-    Camera(vec3f_t origin,double sense);
+    vec3f_t origin;
+    Camera(vec3f_t origin, double sense);
     void updateCamera();
     void use();
 };

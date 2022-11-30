@@ -21,6 +21,7 @@ typedef struct Key
     int v;
     int b;
     int n;
+    int l;
 } keyboard_t;
 
 extern keyboard_t keyboard;
@@ -31,6 +32,8 @@ extern keyboard_t keyboard;
 extern float razaoAspecto, prev_wh, prev_ww, max_x, max_y;
 
 extern GLuint x_mouse, y_mouse;
+
+extern bool lightIsOn;
 
 void keyboardFct(unsigned char key, int x, int y);
 void reshapeFct(int width, int height);

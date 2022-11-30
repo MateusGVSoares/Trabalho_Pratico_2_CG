@@ -14,6 +14,7 @@
 
 SolarSystem *sistemaSolar;
 Camera *main_camera;
+bool playSound = false, isPlaying = false;
 
 void printText(void *font, char *string)
 {
@@ -36,8 +37,11 @@ void printInfo()
     sprintf(aux_buffer, " -> Iluminação Difusa (C/v) : %0.2f", var_dif);
     printText(FONTE, aux_buffer);
 
-    glRasterPos3f(-1.0 * razaoAspecto, 0.85, -2.0);
+    glRasterPos3f(-1.0 * razaoAspecto, 0.90, -2.0);
     sprintf(aux_buffer, " -> Iluminação Especular (B/n) : %0.2f", var_spec);
+    printText(FONTE, aux_buffer);
+    glRasterPos3f(-1.0 * razaoAspecto, 0.80, -2.0);
+    sprintf(aux_buffer, " -> Luzes Dos Planetas : %s", lightIsOn ? "Ligada" : "Desligada");
     printText(FONTE, aux_buffer);
 
     delete aux_buffer;
@@ -51,10 +55,6 @@ void drawUpdate()
     // Carrega a identidade no sistema
     glLoadIdentity();
 
-    // Utiliza de coordenadas cilindricas para movimentar a camera
-    // x = origin.x + p*sin(θ)*cos(Φ)
-    // y = origin.y + p
-    // z = origin.z +p*cos(θ)*cos(Φ)
     printInfo();
 
     main_camera->use();
@@ -71,9 +71,40 @@ void drawUpdate()
 
 void onTimeUpdate(int param)
 {
+    // Limpa o estado de playSound
+    playSound = 0;
+
     // Movimenta as esferas
     sistemaSolar->updateOnTime();
     main_camera->updateCamera();
+
+    if (keyboard.l)
+    {
+        lightIsOn = !lightIsOn;
+    }
+
+    if (playSound)
+    {
+        // Verifica já estava tocando     
+        if (!isPlaying)
+        {
+            // Sinaliza q está tocando
+            isPlaying = 1;
+
+            // Começa a tocar a musica
+        }
+    }
+    else
+    {
+        // Verifica se estava tocando audio 
+        if (isPlaying)
+        {
+            // Sinaliza que não está tocando mais
+            isPlaying = 0;
+
+            // Desliga o player
+        }
+    }
     glutPostRedisplay();
     glutTimerFunc(param, onTimeUpdate, param);
 }
