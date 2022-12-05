@@ -210,7 +210,7 @@ void initGame()
     sistemaSolar = new SolarSystem("solarsystem.sscp");
     mainMixer = new MusicPlayer();
 
-    mainMixer->loadMusic("ambiente", "default.mp3");
+    mainMixer->loadMusic("ambiente", "assets/music/default.mp3");
     // mainMixer->playMusic("ambiente");
 }
 
