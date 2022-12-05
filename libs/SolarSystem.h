@@ -24,7 +24,7 @@ private:
     int skyBoxTexture;
 
 public:
-    std::vector<Body *> aux_sound;
+    std::vector<vec3f_t *> aux_sound;
     SolarSystem(const char *script_name);
 
     // Parser para o script de sistema solar

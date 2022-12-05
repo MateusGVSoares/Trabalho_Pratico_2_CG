@@ -29,8 +29,8 @@ int SolarSystem::parseScript(const char *file_name)
     GLfloat vel_rot = 0, elipse_a, elipse_b,
             vel_trans = 0, radius = 0;
 
-    char *input_str = (char *)malloc(sizeof(char) * 50);
-    char *tex_name = (char *)malloc(sizeof(char) * 50);
+    char *input_str = (char *)malloc(sizeof(char) * 300);
+    char *tex_name = (char *)malloc(sizeof(char) * 300);
 
     float lightAmb[4] = {0};
     float lightSpec[4] = {0};
@@ -83,6 +83,9 @@ int SolarSystem::parseScript(const char *file_name)
     {
         // limpa a flag de emissor de luz
         lightEmissor = 0;
+        interactWithLight = 0;
+        interactWithSound = 0;
+
         mov_origem.x = 0;
         mov_origem.y = 0;
         mov_origem.z = 0;
@@ -101,29 +104,30 @@ int SolarSystem::parseScript(const char *file_name)
 
         // Diminui a flag para analise de orbita
         // Obter o centro de movimento (x, y, z)
-        file->getline(input_str, 30, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%f,%f,%f", &mov_origem.x, &mov_origem.y, &mov_origem.z);
 
         // Obtem o raio do corpo
-        file->getline(input_str, 10, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%f", &radius);
 
         // Obter os coeficientes "a" e "b" das elipses
-        file->getline(input_str, 10, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%f", &elipse_a);
-        file->getline(input_str, 10, ';');
+
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%f", &elipse_b);
 
         // Obter velocidade de rotação
-        file->getline(input_str, 10, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%f", &vel_rot);
 
         // Obter velocidade de translação
-        file->getline(input_str, 10, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%f", &vel_trans);
 
         // Obter propriedade de emissor de luz
-        file->getline(input_str, 10, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%d", &lightEmissor);
 
         // Verifica se é um emissor de Luz
@@ -141,12 +145,16 @@ int SolarSystem::parseScript(const char *file_name)
         }
 
         // Obter o número de luas
-        file->getline(input_str, 10, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%d", &n_luas);
 
         // Verifica se interage com a luz
-        file->getline(input_str, 20, ';');
+        file->getline(input_str, 100, ';');
         sscanf(input_str, "%d", &interactWithLight);
+
+        // Verifica se interage com o som
+        file->getline(input_str, 100, ';');
+        sscanf(input_str, "%d", &interactWithSound);
 
         // Pegar o nome do script de textura
         file->getline(tex_name, 100, ';');
@@ -154,31 +162,35 @@ int SolarSystem::parseScript(const char *file_name)
         // Cria o objeto como um corpo ou como emissor de luz
         if (lightEmissor)
         {
-            printf(" -- Criou um corpo Luminoso \n");
+
             astros.push_back(std::make_shared<LightBody>(tex_name, mov_origem, radius, mov_origem, vel_rot,
-                                                         vel_trans, elipse_a, elipse_b, n_luas, interactWithLight, lightAmb, lightDif, lightSpec, GL_LIGHT0 + n_fonts));
+                                                         vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight, lightAmb, lightDif, lightSpec, GL_LIGHT0 + n_fonts));
             n_fonts++;
+            printf(" -- Criou um corpo Luminoso \n");
         }
         else
         {
-            printf(" -- Criou um corpo \n");
+
             astros.push_back(std::make_shared<Body>(tex_name, mov_origem, radius, mov_origem, vel_rot,
                                                     vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight));
+            printf(" -- Criou um corpo \n");
         }
 
-        printf("Centro do Movimento : %0.2f %0.2f %0.2f \nRaio do Planeta : %0.2f \n A: %0.2f B: %0.2f \n VelRot: %0.2f | VelTrans: %0.2f\n Emissor de Luz : %d\n Numero de Luas : %d\n Interage com a luz:%d\n Script de Textura : %s\n",
-               mov_origem.x,
-               mov_origem.y,
-               mov_origem.z,
-               radius,
-               elipse_a,
-               elipse_b,
-               vel_rot,
-               vel_trans,
-               lightEmissor,
-               n_luas,
-               interactWithLight,
-               tex_name);
+        // printf("Centro do Movimento : %0.2f %0.2f %0.2f \nRaio do Planeta : %0.2f \n A: %0.2f B: %0.2f \n VelRot: %0.2f | VelTrans: %0.2f\n Emissor de Luz : %d\n Numero de Luas : %d\n Interage com a luz:%d\n Interage com som:%d\n Script de Textura : %s\n",
+        //        mov_origem.x,
+        //        mov_origem.y,
+        //        mov_origem.z,
+        //        radius,
+        //        elipse_a,
+        //        elipse_b,
+        //        vel_rot,
+        //        vel_trans,
+        //        lightEmissor,
+        //        n_luas,
+        //        interactWithLight,
+        //        interactWithSound,
+        //        tex_name);
+
         // Lê o resto da linha
         // file->getline(input_str, 1);
     }
@@ -193,6 +205,13 @@ int SolarSystem::parseScript(const char *file_name)
 void SolarSystem::updateOnTime()
 {
     vec3f_t *body_mov;
+
+    // Limpa a stack
+    while (!centerStack->empty())
+        centerStack->pop();
+
+    // Limpa o buffer de astros que interagem com som
+    aux_sound.clear();
 
     // Atualiza o movimento de todos os astros
     for (int i = 0, aux_orbit = 0; i < astros.size(); i++)
@@ -232,6 +251,11 @@ void SolarSystem::updateOnTime()
 
             centerStack->push(std::make_pair(*body_mov, aux_orbit));
         }
+        // Verifica se interage com som
+        if (astros[i]->withSound())
+        {
+            aux_sound.push_back(astros[i]->getOrigin());
+        }
     }
 }
 
@@ -264,11 +288,6 @@ void SolarSystem::updateOnDraw()
         else
         {
             aux_light.push_back(astros[i].get());
-        }
-
-        if (astros[i]->withSound())
-        {
-            aux_sound.push_back(astros[i].get());
         }
     }
     glDisable(GL_LIGHTING);

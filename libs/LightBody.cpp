@@ -21,12 +21,13 @@ LightBody::LightBody(const char *tex_name,
                      GLuint lightFont) : Body(tex_name,
                                               origin,
                                               raio,
-                                              mov_center, ang_vel, transl_vel, elipse_a, elipse_b, n_luas,interactWithSound, interactWithLight)
+                                              mov_center, ang_vel, transl_vel, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight)
 {
     memcpy(this->lightAmb, lightAmb, sizeof(float) * 4);
     memcpy(this->lightDif, lightDif, sizeof(float) * 4);
     memcpy(this->lightSpec, lightSpec, sizeof(float) * 4);
 
+    this->interactWithSound = interactWithSound;
     // Seta qual fonte de luz esse corpo ira alterar
     this->lightFont = lightFont;
 

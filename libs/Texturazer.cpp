@@ -124,4 +124,6 @@ Texturazer::Texturazer(const char *script_name)
     {
         printf("Arquivo de Textura [%s] Inexistente ou Inelegivel ! \n", script_name);
     }
+    else
+        printf("Carregou a textura do arquivo [%s] \n",script_name);
 }

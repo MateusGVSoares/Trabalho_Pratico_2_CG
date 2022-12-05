@@ -4,17 +4,25 @@
 // OpenGL, GLUT & GLEW libs
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 // Development libs
 #include "libs/SolarSystem.h"
 #include "libs/callback.h"
 #include "libs/Camera.h"
+#include "libs/MusicPlayer.h"
 
 #define FONTE GLUT_BITMAP_8_BY_13
 
 SolarSystem *sistemaSolar;
 Camera *main_camera;
-bool playSound = false, isPlaying = false;
+MusicPlayer *mainMixer;
+
+bool playSound = false, // Variavel de controle do som
+    isPlaying = false;  // Variavel auxiliar para o som
+
+double lightTimeout = 0.0f; // Timeout para não ficar com o pressionamento das luzes muito rápido
 
 void printText(void *font, char *string)
 {
@@ -23,6 +31,7 @@ void printText(void *font, char *string)
         glutBitmapCharacter(font, *c);
 }
 
+// Função para desenhar as informações na tela
 void printInfo()
 {
     glDisable(GL_LIGHTING);
@@ -55,10 +64,13 @@ void drawUpdate()
     // Carrega a identidade no sistema
     glLoadIdentity();
 
+    // Desenha o texto na tela
     printInfo();
 
+    // Posiciona a camera
     main_camera->use();
 
+    // Desenha a SkyBox
     sistemaSolar->drawSkyBox();
 
     // Desenha todas as esferas
@@ -69,42 +81,71 @@ void drawUpdate()
     glutSwapBuffers();
 }
 
+double calcDistance(vec3f_t *a, vec3f_t *b)
+{
+    vec3f_t result = {
+        .x = a->x - b->x,
+        .y = a->y - b->y,
+        .z = a->z - b->z};
+
+    // Calcula a distância entre os pontos
+    double distance = sqrt(pow(result.x, 2) + pow(result.y, 2) + pow(result.z, 2));
+    return distance;
+}
+
 void onTimeUpdate(int param)
 {
+    // Incrementa o contador de timeout
+    lightTimeout += 1.0f / (param);
+
     // Limpa o estado de playSound
     playSound = 0;
 
-    // Movimenta as esferas
-    sistemaSolar->updateOnTime();
+    // Atualiza a posicao da camera
     main_camera->updateCamera();
 
-    if (keyboard.l)
+    // Movimenta as esferas
+    sistemaSolar->updateOnTime();
+
+    // Verifica o pressionamento da tecla L
+    if (keyboard.l && lightTimeout >= 1.0f)
     {
+        lightTimeout = 0.0f;
         lightIsOn = !lightIsOn;
     }
 
+    float distance = 0.0f;
+
+    for (int i = 0; i < sistemaSolar->aux_sound.size(); i++)
+    {
+        distance = calcDistance(&main_camera->origin, sistemaSolar->aux_sound[i]);
+        // verifica a distância dos pontos q deve tocar som
+        if (distance <= 200.0f)
+        {
+            playSound = true;
+            break;
+        }
+    }
+
+    // Verifica se deve ou nao tocar som
     if (playSound)
     {
-        // Verifica já estava tocando     
-        if (!isPlaying)
-        {
-            // Sinaliza q está tocando
-            isPlaying = 1;
+        // Seta o volume de acordo com a distancia, para dar o efeito de fade
+        mainMixer->setVolume((200.0f - distance) / 2.0f);
 
-            // Começa a tocar a musica
-        }
+        // Resume a musica
+        mainMixer->resumeMusic("ambiente");
     }
     else
     {
-        // Verifica se estava tocando audio 
-        if (isPlaying)
+        // Verifica se estava tocando audio
+        if (mainMixer->isPlaying())
         {
-            // Sinaliza que não está tocando mais
-            isPlaying = 0;
 
-            // Desliga o player
+            mainMixer->stopMusic();
         }
     }
+
     glutPostRedisplay();
     glutTimerFunc(param, onTimeUpdate, param);
 }
@@ -167,12 +208,26 @@ void initGame()
 
     main_camera = new Camera(cam_origin, 0.1);
     sistemaSolar = new SolarSystem("solarsystem.sscp");
+    mainMixer = new MusicPlayer();
+
+    mainMixer->loadMusic("ambiente", "default.mp3");
+    // mainMixer->playMusic("ambiente");
 }
 
 int main(int argc, char **argv)
 {
     // Inicializa a glut
     glutInit(&argc, argv);
+
+    // Inicializa o mixer do SDL
+    Mix_Init(MIX_INIT_MP3);
+    SDL_Init(SDL_INIT_AUDIO);
+
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0)
+    {
+        printf("Nao conseguiu inicializar o subsistema de audio \n");
+        exit(1);
+    }
 
     // Configura a janela da glut
     configGlut();
@@ -183,7 +238,7 @@ int main(int argc, char **argv)
     // Configura o OpenGl e a Iluminacao
     configOpenGl();
 
-    // Inicializa os planetas
+    // Inicializa os planetas e o mixer de audio
     initGame();
 
     // Começa o loop principal

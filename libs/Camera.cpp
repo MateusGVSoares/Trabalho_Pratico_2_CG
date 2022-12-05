@@ -14,6 +14,10 @@ Camera::Camera(vec3f_t origin, double sense)
 
 void Camera::updateCamera()
 {
+    // DETALHE
+    // Faça o produto vetorial do vetor que aponta para cima com o vetor que aponta para a direção para obter um vetor paralelo à esquerda
+    // Faça o produto vetorial do vetor que aponta para direção com o vetor que aponta para cima para obter um vetor paralelo à direita
+
     // Câmera não faz rotação em torno do eixo Y, entao calculamos roll e pitch
     vec3f_t mouse_pointer = {0};
 
@@ -23,7 +27,7 @@ void Camera::updateCamera()
     mouse_pointer.y = (float)y_mouse / h - 0.5;
 
     // printf("Mouse vector : %f %f\n", mouse_pointer.x, mouse_pointer.y);
-    roll += mouse_pointer.x * sense;
+    yaw += mouse_pointer.x * sense;
     pitch -= mouse_pointer.y * sense;
 
     if (pitch > 80)
@@ -37,9 +41,9 @@ void Camera::updateCamera()
 
     // Obtem um vetor unitário,
     // com base em coordenadas esféricas para a direção que está sendo olhada na camêra
-    direction.x = cos(roll) * cos(pitch);
+    direction.x = cos(yaw) * cos(pitch);
     direction.y = sin(pitch);
-    direction.z = sin(roll) * cos(pitch);
+    direction.z = sin(yaw) * cos(pitch);
 
     this->origin.x += (keyboard.w - keyboard.s) * direction.x;
     this->origin.y += (keyboard.w - keyboard.s) * direction.y;

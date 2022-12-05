@@ -2,7 +2,7 @@
 
 
 # TODO
-- Fazer o sistema de som
+- Fazer o sistema de som -> Implementado >_<
 - Fazer o parser para modelo .obj
 - Impedir a nave de sair do sistema 
 - Criar uma textura ou modelo de nave 

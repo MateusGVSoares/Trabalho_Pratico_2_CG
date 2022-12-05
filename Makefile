@@ -1,6 +1,6 @@
 CC = g++
 OUTPUT=main
-FLAGS=-lGL -lGLU -lglut -lm -lSOIL -lGLEW
+FLAGS=-lGL -lGLU -lglut -lm -lSOIL -lGLEW -lSDL2 -lSDL2_mixer
 
 
 all:
