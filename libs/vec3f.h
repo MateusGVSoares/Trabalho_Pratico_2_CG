@@ -8,4 +8,10 @@ typedef struct vec3f
     float z;
 } vec3f_t;
 
+typedef struct vec2f
+{
+    float x;
+    float y;
+}vec2f_t;
+
 #endif

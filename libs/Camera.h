@@ -14,6 +14,7 @@ private:
     double yaw;   // Rotação no eixo y
     double sense;
     vec3f_t direction;
+    vec3f_t side;
 
 public:
     vec3f_t origin;
