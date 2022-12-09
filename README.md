@@ -22,6 +22,7 @@
 -   FreeGlut - sudo apt-get install freeglut3-dev
 -   GLEW - sudo apt-get install libglew-dev
 -   SOIL - sudo apt-get install libsoil-dev
+-   SDL_MIXER - sudo apt-get install libsdl2-mixer-dev	
 
 ## Como Compilar e Executar
 
