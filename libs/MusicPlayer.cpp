@@ -21,7 +21,10 @@ int MusicPlayer::loadMusic(const char *music_name, const char *filename)
 
 void MusicPlayer::setVolume(float vol)
 {
+    // Calcula o volume baseado no volume maximo da SDL
     this->volume = (MIX_MAX_VOLUME * vol) / 100.0f;
+
+    // Chama a funcao da SDL_MIXER pra setar o volume
     Mix_VolumeMusic(this->volume);
 }
 
@@ -32,36 +35,43 @@ void MusicPlayer::playMusic(const char *name)
 
     it = this->loaded_sounds.find(name);
 
+    // Verifica se retornou que nao existe a key no map
     if (it == loaded_sounds.end())
     {
         printf("MIXER::Esse arquivo de audio nao foi carregado ou o nome nao existe");
         return;
     }
 
+    // No iterator, tem um pair
+    // first é a key / nome da musica
+    // second é o valor / objeto de musica carregado
+
     // Pega a musica correspondente aquele nome
     music = it->second;
 
-    if (!Mix_PlayingMusic())
-    {
-        Mix_PlayMusic(music, 0);
-    }
-    else
-        printf("MIXER::Ja ta tocando musica, pare a musica antes de tocar outra \n");
+    // Toca a musica
+    Mix_PlayMusic(music, 0);
 }
 
 bool MusicPlayer::isPlaying()
 {
+    // Usa funcao da SDL para verificar se esta tocando musica
     return Mix_PlayingMusic();
 }
 
 void MusicPlayer::resumeMusic(const char *name)
 {
+    // Verifica se tem alguma musica pausada no SDL
     if (Mix_PausedMusic())
     {
+        // Se tiver, ele retoma essa musica
         Mix_ResumeMusic();
     }
+
+    // Verifica se esta tocando musica
     if (!Mix_PlayingMusic())
     {
+        // Poe pra tocar a musica do parametro
         this->playMusic(name);
     }
 }
@@ -69,8 +79,10 @@ void MusicPlayer::resumeMusic(const char *name)
 // Pausa a musica
 void MusicPlayer::stopMusic()
 {
+    // Verifica se esta tocando musica
     if (Mix_PlayingMusic())
     {
+        // Pausa a musica que esta tocando
         Mix_PauseMusic();
     }
     else

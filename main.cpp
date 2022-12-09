@@ -78,6 +78,7 @@ void drawUpdate()
     // Desenha todas as esferas
     sistemaSolar->updateOnDraw();
 
+    // Ta aqui de improviso, tem q arrumar um jeito de renderizar com os planetas
     glEnable(GL_LIGHTING);
     teste_model->renderModel();
     glDisable(GL_LIGHTING);

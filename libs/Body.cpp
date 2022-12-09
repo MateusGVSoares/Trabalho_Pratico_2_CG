@@ -105,9 +105,10 @@ void Body::move(vec3f_t *aux_mov)
         rot_angle -= 360;
     }
     // Utiliza de coordenadas polares para descrever uma elipse
+    // Coordenadas do opengl sao diferentes
     // X = a * cos (angulo) + x0
-    // Y = b * sen (angulo) + y0
-    // Z (Nao esta mexida, se for necessario, usa coordenada esferica ou cilindrica >_<
+    // Y = 0 (nao mexer se n quiser translacao para cima e para baixo)
+    // Z = b * sen (angulo) + y0
 
     this->origin.x = aux_mov->x + elipse_a * cos(transl_angle * M_PI / 180.0f);
     this->origin.y = 0;

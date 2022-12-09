@@ -62,6 +62,7 @@ void Camera::updateCamera()
 
 void Camera::use()
 {
+    // Usa dos dados calculados para movimentar a camera
     gluLookAt(origin.x, origin.y, origin.z,
               origin.x + direction.x, direction.y + origin.y, direction.z + origin.z,
               0, 1, 0);
