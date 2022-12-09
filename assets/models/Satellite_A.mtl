@@ -1,18 +1,8 @@
-# Blender MTL File: 'Satellite.blend'
+# Blender MTL File: 'None'
 # Material Count: 4
 
-newmtl Material
-Ns 323.999994
-Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
 newmtl Material.001
-Ns 626.881120
+Ns 99.999988
 Ka 0.827068 0.827068 0.827068
 Kd 0.000000 0.001879 0.800000
 Ks 0.500000 0.500000 0.500000
@@ -20,9 +10,10 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 3
+map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/panel_blue.jpg
 
-newmtl Material.004
-Ns 225.000000
+newmtl Material.002
+Ns 99.999988
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
 Ks 0.500000 0.500000 0.500000
@@ -30,9 +21,21 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metal_white.png
+
+newmtl Material.004
+Ns 99.999988
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metallic_white.png
 
 newmtl Material.006
-Ns 346.858958
+Ns 99.999988
 Ka 0.563758 0.563758 0.563758
 Kd 0.800000 0.800000 0.800000
 Ks 0.852349 0.852349 0.852349
@@ -40,3 +43,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 3
+map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metal_white.png

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <iostream>
 #include <fstream>
+#include <SOIL/SOIL.h>
 
 // OGL libs
 #include <GL/gl.h>
@@ -27,16 +28,12 @@ typedef struct vertex
 
 typedef struct material
 {
-    float difusse[4];
+    float ambient[4];
+    float diffuse[4];
     float specular[4];
     float shine[4];
+    GLint texture;
 } material_t;
-
-typedef struct mesh
-{
-    std::vector<vertex_t> vertices;
-    std::string use_material;
-} mesh_t;
 
 class Model
 {
@@ -44,25 +41,26 @@ private:
     vec3f_t origin;
     vec3f_t rot_vec;
 
-    // Faz uma lista de mesh/grupos de poligonos
-    std::vector<mesh_t> mesh_list;
+    // Vetor de Call Lists que devem ser renderizadas
+    std::vector<GLuint> cList;
 
-    // Faz um map de materiais
-    std::map<std::string, material_t> mat_map;
+    // Armazena um vetor de texturas carregadas para liberar essa memória depois
+    std::vector<uint> loaded_textures;
 
 public:
-    // Model();
-    // ~Model();
+    Model();
+
+    ~Model();
 
     // Função para rotacionar o modelo
-    // void rotateModel(vec3f_t *rot);
+    void rotateModel(vec3f_t *rot);
 
     // Função para transladar o modelo
-    // void moveModel(vec3f_t *mov);
+    void moveModel(vec3f_t *mov);
 
     // Função para carregar o modelo
     void loadModel(const char *fname);
 
     // Função para renderizar o modelo
-    // void renderModel();
+    void renderModel();
 };

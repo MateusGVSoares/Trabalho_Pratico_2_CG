@@ -12,12 +12,14 @@
 #include "libs/callback.h"
 #include "libs/Camera.h"
 #include "libs/MusicPlayer.h"
+#include "libs/Model.h"
 
 #define FONTE GLUT_BITMAP_8_BY_13
 
 SolarSystem *sistemaSolar;
 Camera *main_camera;
 MusicPlayer *mainMixer;
+Model *teste_model;
 
 bool playSound = false, // Variavel de controle do som
     isPlaying = false;  // Variavel auxiliar para o som
@@ -75,6 +77,8 @@ void drawUpdate()
 
     // Desenha todas as esferas
     sistemaSolar->updateOnDraw();
+
+    teste_model->renderModel();
 
     // Clean Code <3
     // Swap buffers >_<
@@ -184,7 +188,7 @@ void configOpenGl()
     glEnable(GL_DEPTH_TEST);
 
     // Não mostrar faces do lado de dentro
-    glDisable(GL_CULL_FACE);
+    // glDisable(GL_CULL_FACE);
 
     // Esconder o ponteiro do mouse quando dentro da janela
     // glutSetCursor(GLUT_CURSOR_NONE);
@@ -201,6 +205,7 @@ void configOpenGl()
 
 void initGame()
 {
+    printf("PRECISO REVER\n SEU SORRISO UM TANTO SEM GRACA\n PRECISO VOLTAR\nMAIS UMA VEZ COM VOCE LA NA PRACA\n");
     vec3f_t cam_origin = {
         .x = 0,
         .y = 300,
@@ -209,8 +214,19 @@ void initGame()
     main_camera = new Camera(cam_origin, 0.1);
     sistemaSolar = new SolarSystem("solarsystem.sscp");
     mainMixer = new MusicPlayer();
+    teste_model = new Model();
 
+    // Carrega a musica
     mainMixer->loadMusic("ambiente", "assets/music/default.mp3");
+
+    // Carrega o modelo
+    teste_model->loadModel("assets/models/Satellite_A.obj");
+
+    cam_origin.x = 0;
+    cam_origin.y = 200;
+    cam_origin.z = 0;
+    teste_model->moveModel(&cam_origin);
+
     // mainMixer->playMusic("ambiente");
 }
 
