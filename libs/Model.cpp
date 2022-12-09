@@ -3,6 +3,7 @@
 // Parser para um .obj
 void Model::loadModel(const char *fname)
 {
+    printf("\n\n\n");
     // Variavel auxiliar para indicar que está atualmente carregando uma mesh na memoria
     bool generating_list = false;
 
@@ -41,9 +42,9 @@ void Model::loadModel(const char *fname)
     vertex_t aux_vertex = {0};
 
     std::ifstream file, material_file;
-    std::string header, readl, material_token;
+    std::string header, readl, material_token, mat_header, mat_readl;
     char *aux_string = new char[200];
-
+    glEnable(GL_TEXTURE_2D);
     // Tenta abrir o arquivo
     file.open(fname);
     if (!file.is_open())
@@ -101,8 +102,8 @@ void Model::loadModel(const char *fname)
             printf("Gerou uma nova lista para o objeto %s [Lista = %d] \n", readl.c_str(), aux_list);
             // Começa a compilar a lista
             glNewList(aux_list, GL_COMPILE);
-            glPushMatrix();
             glEnable(GL_TEXTURE_2D);
+            glPushMatrix();
             // exit(0);
         }
         else if (header == "v") // Ponto
@@ -142,29 +143,29 @@ void Model::loadModel(const char *fname)
 
             while (material_file.peek() != EOF)
             {
+                mat_header.clear();
+                std::getline(material_file, mat_header, ' ');
 
-                std::getline(material_file, header, ' ');
-                printf("%s \n",header.c_str());
-                if (header == "#")
+                if (mat_header == "#")
                 {
                     std::getline(material_file, readl);
                 }
-                else if (header == "Ni")
+                else if (mat_header == "Ni")
                 {
                     // Nao usa entao ignora
                     std::getline(material_file, readl);
                 }
-                else if (header == "d")
+                else if (mat_header == "d")
                 {
                     // Nao usa entao ignora
                     std::getline(material_file, readl);
                 }
-                else if (header == "illum")
+                else if (mat_header == "illum")
                 {
                     // Nao usa entao ignora
                     std::getline(material_file, readl);
                 }
-                else if (header == "newmtl")
+                else if (mat_header.find("newmtl") != mat_header.npos)
                 {
                     // Lê a string de material
                     std::getline(material_file, material_token);
@@ -172,25 +173,27 @@ void Model::loadModel(const char *fname)
                     // Cria uma struct de material com essa key no map
                     aux_material = mat_map[material_token];
                 }
-                else if (header[0] == 'K')
+                else if (mat_header[0] == 'K')
                 {
                     // Lê a componente e salva no respectivo vetor
                     std::getline(material_file, readl);
                     sscanf(readl.c_str(), "%lf %lf %lf", &v3.x, &v3.y, &v3.z);
 
-                    if (header[1] == 'a')
+                    aux_material = mat_map[material_token];
+
+                    if (mat_header[1] == 'a')
                     {
                         aux_mat_vet = aux_material.ambient;
                     }
-                    else if (header[1] == 'd')
+                    else if (mat_header[1] == 'd')
                     {
                         aux_mat_vet = aux_material.diffuse;
                     }
-                    else if (header[1] == 's')
+                    else if (mat_header[1] == 's')
                     {
                         aux_mat_vet = aux_material.specular;
                     }
-                    else if (header[1] == 'e')
+                    else if (mat_header[1] == 'e')
                     {
                         // Nao faco ideia do q seja 'e', mas n usamos, entao nao importa
                         aux_mat_vet = NULL;
@@ -204,33 +207,34 @@ void Model::loadModel(const char *fname)
                         aux_mat_vet[3] = 1;
                     }
                 }
-                else if (header == "Ns")
+                else if (mat_header == "Ns")
                 {
                     // Lê o valor de shinines e armazena ele no vetor do material
                     std::getline(material_file, readl);
                     sscanf(readl.c_str(), "%f", &ks_mult);
-                    aux_material.shine[0] = aux_material.shine[1] = aux_material.shine[2] = ks_mult;
-                    aux_material.shine[3] = 1.0f;
+                    mat_map[material_token].shine[0] = aux_material.shine[1] = aux_material.shine[2] = ks_mult;
+                    mat_map[material_token].shine[3] = 1.0f;
                 }
-                else if (header == "map_Kd") // Textura
+                else if (mat_header == "map_Kd") // Textura
                 {
                     std::getline(material_file, readl);
                     // Carrega a textura em um vetor de texturas
                     GLuint idTextura = SOIL_load_OGL_texture(readl.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_DDS_LOAD_DIRECT);
                     printf("Model::Loader::SOIL::%s \n", SOIL_last_result());
-                    aux_material.texture = idTextura;
+                    mat_map[material_token].texture = idTextura;
                     this->loaded_textures.push_back(idTextura);
                 }
             }
             material_file.close();
             printf("Model::Loader::Leu o arquivo de material!\n");
-            exit(1);
-            // std::map<std::string,material_t>::iterator it;
+            // exit(1);
+            std::map<std::string, material_t>::iterator it;
 
-            // for(it = mat_map.begin();it != mat_map.end(); it++)
-            // {
-            //     printf("")
-            // }
+            for (it = mat_map.begin(); it != mat_map.end(); it++)
+            {
+                printf("[%s] ", it->first.c_str());
+            }
+            printf("\n");
             // exit(1);
         }
         else if (header == "usemtl") // Usa o material apropriado para o vértice
@@ -241,14 +245,16 @@ void Model::loadModel(const char *fname)
             // Procura o material no map
             aux_material = mat_map[readl];
             printf("Model::Loader::Usando material [%s] \n ", readl.c_str());
+            printf("Model::Loader::Usando a textura =  [%d] \n ", aux_material.texture);
+
+            // Usa a textura
+            glBindTexture(GL_TEXTURE_2D, aux_material.texture);
+
             // Muda o material do Body de acordo com os parametros da textura
             glMaterialfv(GL_FRONT, GL_AMBIENT, aux_material.ambient);
             glMaterialfv(GL_FRONT, GL_DIFFUSE, aux_material.diffuse);
             glMaterialfv(GL_FRONT, GL_SPECULAR, aux_material.specular);
             glMaterialfv(GL_FRONT, GL_SHININESS, aux_material.shine);
-
-            // Usa a textura
-            glBindTexture(GL_TEXTURE_2D, aux_material.texture);
         }
         else if (header == "f") // Linha de face
         {
@@ -257,7 +263,7 @@ void Model::loadModel(const char *fname)
             // Posicao - Textura - Normal
             std::getline(file, readl);
             // printf("%s \n", readl.c_str());
-            glBegin(GL_TRIANGLE_STRIP);
+            glBegin(GL_TRIANGLE_FAN);
             for (int i = 0, aux_read = 4; readl[i] != '\0' && i < readl.size() && aux_read; i++)
             {
 

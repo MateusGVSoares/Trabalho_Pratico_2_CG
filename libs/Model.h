@@ -52,6 +52,9 @@ public:
 
     ~Model();
 
+    // Gambiarra pra fzr essa porra girar na terra
+    // void updateMove();
+
     // Função para rotacionar o modelo
     void rotateModel(vec3f_t *rot);
 

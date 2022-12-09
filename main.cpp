@@ -78,8 +78,9 @@ void drawUpdate()
     // Desenha todas as esferas
     sistemaSolar->updateOnDraw();
 
+    glEnable(GL_LIGHTING);
     teste_model->renderModel();
-
+    glDisable(GL_LIGHTING);
     // Clean Code <3
     // Swap buffers >_<
     glutSwapBuffers();
@@ -222,9 +223,9 @@ void initGame()
     // Carrega o modelo
     teste_model->loadModel("assets/models/Satellite_A.obj");
 
-    cam_origin.x = 0;
-    cam_origin.y = 200;
-    cam_origin.z = 0;
+    cam_origin.x = 150;
+    cam_origin.y = 0;
+    cam_origin.z = 150;
     teste_model->moveModel(&cam_origin);
 
     // mainMixer->playMusic("ambiente");

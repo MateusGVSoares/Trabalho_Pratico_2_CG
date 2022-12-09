@@ -3,14 +3,14 @@
 
 newmtl Material.001
 Ns 99.999988
-Ka 0.827068 0.827068 0.827068
-Kd 0.000000 0.001879 0.800000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
-Ni 1.450000
+Ni 1.000000
 d 1.000000
-illum 3
-map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/panel_blue.jpg
+illum 2
+map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/panel_blue.png
 
 newmtl Material.002
 Ns 99.999988
@@ -32,15 +32,15 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metallic_white.png
+map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metal_white.png
 
 newmtl Material.006
 Ns 99.999988
-Ka 0.563758 0.563758 0.563758
+Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
-Ks 0.852349 0.852349 0.852349
+Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
-Ni 1.450000
+Ni 1.000000
 d 1.000000
-illum 3
+illum 2
 map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metal_white.png
