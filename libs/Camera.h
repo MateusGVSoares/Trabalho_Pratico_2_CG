@@ -24,6 +24,8 @@ public:
     vec3f_t origin;
     Camera(vec3f_t origin, double sense);
     void updateCamera();
+    double getYaw();
+    double getPitch();
     void use();
 };
 

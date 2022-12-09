@@ -15,6 +15,18 @@ Camera::Camera(vec3f_t origin, double sense)
     this->rotation = {0};
 }
 
+double Camera::getYaw(){
+
+
+    return yaw;
+}
+
+double Camera::getPitch(){
+
+
+    return pitch;
+}
+
 void Camera::updateCamera()
 {
     // Câmera não faz rotação em torno do eixo Y, entao calculamos roll e pitch
@@ -61,9 +73,9 @@ void Camera::updateCamera()
     mouse_pointer.z = (keyboard.w - keyboard.s) * direction.z;
 
     // Pega a resultante desses vetores
-    this->origin.x += mouse_pointer.x + side.x;
-    this->origin.y += mouse_pointer.y + side.y;
-    this->origin.z += mouse_pointer.z + side.z;
+    this->origin.x += (mouse_pointer.x + side.x)*2;
+    this->origin.y += (mouse_pointer.y + side.y)*2;
+    this->origin.z += (mouse_pointer.z + side.z)*2;
 
     // glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH)/2,glutGet(GLUT_WINDOW_HEIGHT)/2);
 }

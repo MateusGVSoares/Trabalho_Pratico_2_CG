@@ -352,7 +352,7 @@ void Model::renderModel()
     glRotated(rot_vec.x, 1, 0, 0);
     glRotated(rot_vec.y, 0, 1, 0);
     glRotated(rot_vec.z, 0, 0, 1);
-
+    glRotated(90,0,1,0);
     glScalef(scale.x, scale.y, scale.z);
     // Carrega todas as listas de exibição
     // glCallLists(this->cList.size(), GL_UNSIGNED_INT, this->cList.data());

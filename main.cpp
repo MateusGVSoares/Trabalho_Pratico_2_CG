@@ -153,17 +153,17 @@ void onTimeUpdate(int param)
         }
     }
     vec3f_t mov{
-        .x = main_camera->origin.x + main_camera->direction.x,
-        .y = main_camera->origin.y + main_camera->direction.y - 5,
-        .z = main_camera->origin.z + main_camera->direction.z +10};
+        .x = main_camera->origin.x + main_camera->direction.x+10*cos(main_camera->getYaw()),
+        .y = main_camera->origin.y + main_camera->direction.y -5*cos(main_camera->getPitch()),
+        .z = main_camera->origin.z + main_camera->direction.z +10*sin(main_camera->getYaw())};
 
     teste_model->moveModel(&mov);
 
-    // mov.x = -main_camera->rotation.x * 180.0f / M_PI;
-    // mov.y = -main_camera->rotation.y * 180.0f / M_PI;
-    // mov.z = -main_camera->rotation.z * 180.0f / M_PI;
+    mov.x = +main_camera->rotation.x * 180.0f / M_PI;
+    mov.y = -main_camera->rotation.y * 180.0f / M_PI;
+    mov.z = +main_camera->rotation.z * 180.0f / M_PI;
 
-    // teste_model->rotateModel(&mov);
+    teste_model->rotateModel(&mov);
     glutPostRedisplay();
     glutTimerFunc(param, onTimeUpdate, param);
 }
