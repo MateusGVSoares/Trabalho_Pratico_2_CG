@@ -153,6 +153,7 @@ void LightBody::draw()
 
     // Rotaciona em torno do eixo y, pois o y é o eixo para cima no ngc
     glRotatef(-this->rot_angle, 0, 1, 0);
+    glRotatef(90, 1, 0, 0);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, this->texture->loaded_textures[0]);

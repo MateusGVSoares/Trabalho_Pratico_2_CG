@@ -41,6 +41,16 @@ protected:
 
 public:
     int n_luas;
+    Body(vec3f_t origin,
+         double raio,
+         vec3f_t mov_center,
+         double ang_vel,
+         double transl_vel,
+         double elipse_a,
+         double elipse_b,
+         int n_luas,
+         bool interactWithSound,
+         bool interactWithLight);
     Body(const char *tex_name,
          vec3f_t origin,
          double raio,
@@ -54,8 +64,8 @@ public:
          bool interactWithLight);
     ~Body();
     virtual void draw();
-    void move();
-    void move(vec3f_t *aux_mov);
+    virtual void move();
+    virtual void move(vec3f_t *aux_mov);
     bool isLight();
     bool withSound();
     vec3f_t *getOrigin();

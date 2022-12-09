@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 #include <stack>
+#include "BodyModel.h"
 #include "vec3f.h"
 
 class SolarSystem

@@ -15,10 +15,12 @@ private:
     double sense;
     double last_x;
     double last_y;
-    vec3f_t direction;
+
     vec3f_t side;
 
 public:
+    vec3f_t direction;
+    vec3f_t rotation;
     vec3f_t origin;
     Camera(vec3f_t origin, double sense);
     void updateCamera();

@@ -1,3 +1,5 @@
+#ifndef __MODEL__
+#define __MODEL__
 // STL Libs
 #include <vector>
 #include <map>
@@ -40,7 +42,7 @@ class Model
 private:
     vec3f_t origin;
     vec3f_t rot_vec;
-
+    vec3f_t scale;
     // Vetor de Call Lists que devem ser renderizadas
     std::vector<GLuint> cList;
 
@@ -52,9 +54,8 @@ public:
 
     ~Model();
 
-    // Gambiarra pra fzr essa porra girar na terra
-    // void updateMove();
-
+    void scaleModel(vec3f_t * scale_vec);
+    
     // Função para rotacionar o modelo
     void rotateModel(vec3f_t *rot);
 
@@ -67,3 +68,4 @@ public:
     // Função para renderizar o modelo
     void renderModel();
 };
+#endif

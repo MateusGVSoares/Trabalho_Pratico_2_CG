@@ -36,7 +36,7 @@ int SolarSystem::parseScript(const char *file_name)
     float lightSpec[4] = {0};
     float lightDif[4] = {0};
 
-    GLuint n_fonts = 0;
+    GLuint n_fonts = 0, isModel = 0;
 
     // Abro o arquivo
     file->open(file_name, std::ios::in);
@@ -83,9 +83,17 @@ int SolarSystem::parseScript(const char *file_name)
     {
         // limpa a flag de emissor de luz
         lightEmissor = 0;
+
+        // Limpa a flag de interacao com a luz
         interactWithLight = 0;
+
+        // Limpa a flag de interacao com o som
         interactWithSound = 0;
 
+        // Limpa a flag de modelo
+        isModel = 0;
+
+        // Limpa a origem auxiliar
         mov_origem.x = 0;
         mov_origem.y = 0;
         mov_origem.z = 0;
@@ -101,6 +109,9 @@ int SolarSystem::parseScript(const char *file_name)
             numero de luas ,
             script da textura
         */
+        // Verifica se esta lendo um modelo ou um planeta
+        file->getline(input_str, 100, ';');
+        sscanf(input_str, "%d", &isModel);
 
         // Diminui a flag para analise de orbita
         // Obter o centro de movimento (x, y, z)
@@ -114,7 +125,6 @@ int SolarSystem::parseScript(const char *file_name)
         // Obter os coeficientes "a" e "b" das elipses
         file->getline(input_str, 100, ';');
         sscanf(input_str, "%f", &elipse_a);
-
         file->getline(input_str, 100, ';');
         sscanf(input_str, "%f", &elipse_b);
 
@@ -157,25 +167,33 @@ int SolarSystem::parseScript(const char *file_name)
         sscanf(input_str, "%d", &interactWithSound);
 
         // Pegar o nome do script de textura
-        file->getline(tex_name, 100, ';');
+        file->getline(tex_name, 300, ';');
 
-        // Cria o objeto como um corpo ou como emissor de luz
-        if (lightEmissor)
+        if (isModel)
         {
-
-            astros.push_back(std::make_shared<LightBody>(tex_name, mov_origem, radius, mov_origem, vel_rot,
-                                                         vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight, lightAmb, lightDif, lightSpec, GL_LIGHT0 + n_fonts));
-            n_fonts++;
-            printf(" -- Criou um corpo Luminoso \n");
+            astros.push_back(std::make_shared<BodyModel>(tex_name, mov_origem, radius, mov_origem, vel_rot,
+                                                         vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight));
+            printf(" -- Criou um corpo com modelo \n");
         }
         else
         {
+            // Cria o objeto como um corpo ou como emissor de luz
+            if (lightEmissor)
+            {
 
-            astros.push_back(std::make_shared<Body>(tex_name, mov_origem, radius, mov_origem, vel_rot,
-                                                    vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight));
-            printf(" -- Criou um corpo \n");
+                astros.push_back(std::make_shared<LightBody>(tex_name, mov_origem, radius, mov_origem, vel_rot,
+                                                             vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight, lightAmb, lightDif, lightSpec, GL_LIGHT0 + n_fonts));
+                n_fonts++;
+                printf(" -- Criou um corpo Luminoso \n");
+            }
+            else
+            {
+
+                astros.push_back(std::make_shared<Body>(tex_name, mov_origem, radius, mov_origem, vel_rot,
+                                                        vel_trans, elipse_a, elipse_b, n_luas, interactWithSound, interactWithLight));
+                printf(" -- Criou um corpo \n");
+            }
         }
-
         // printf("Centro do Movimento : %0.2f %0.2f %0.2f \nRaio do Planeta : %0.2f \n A: %0.2f B: %0.2f \n VelRot: %0.2f | VelTrans: %0.2f\n Emissor de Luz : %d\n Numero de Luas : %d\n Interage com a luz:%d\n Interage com som:%d\n Script de Textura : %s\n",
         //        mov_origem.x,
         //        mov_origem.y,

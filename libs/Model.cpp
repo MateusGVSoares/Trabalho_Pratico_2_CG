@@ -219,7 +219,7 @@ void Model::loadModel(const char *fname)
                 {
                     std::getline(material_file, readl);
                     // Carrega a textura em um vetor de texturas
-                    GLuint idTextura = SOIL_load_OGL_texture(readl.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_DDS_LOAD_DIRECT);
+                    GLuint idTextura = SOIL_load_OGL_texture(readl.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_DDS_LOAD_DIRECT | SOIL_FLAG_INVERT_Y);
                     printf("Model::Loader::SOIL::%s \n", SOIL_last_result());
                     mat_map[material_token].texture = idTextura;
                     this->loaded_textures.push_back(idTextura);
@@ -247,8 +247,11 @@ void Model::loadModel(const char *fname)
             printf("Model::Loader::Usando material [%s] \n ", readl.c_str());
             printf("Model::Loader::Usando a textura =  [%d] \n ", aux_material.texture);
 
-            // Usa a textura
-            glBindTexture(GL_TEXTURE_2D, aux_material.texture);
+            // Usa a textura, se houver
+            if (aux_material.texture)
+                glBindTexture(GL_TEXTURE_2D, aux_material.texture);
+            else
+                printf("Model::Loader::Material nao tem textura !\n");
 
             // Muda o material do Body de acordo com os parametros da textura
             glMaterialfv(GL_FRONT, GL_AMBIENT, aux_material.ambient);
@@ -318,6 +321,7 @@ void Model::loadModel(const char *fname)
 // Função para rotacionar o modelo
 void Model::rotateModel(vec3f_t *rot)
 {
+    printf("%f %f %f \n",rot->x,rot->y,rot->z);
     this->rot_vec.x = rot->x;
     this->rot_vec.y = rot->y;
     this->rot_vec.z = rot->z;
@@ -331,17 +335,25 @@ void Model::moveModel(vec3f_t *mov)
     this->origin.z = mov->z;
 }
 
+void Model::scaleModel(vec3f_t *scale_vec)
+{
+    this->scale.x = scale_vec->x;
+    this->scale.y = scale_vec->y;
+    this->scale.z = scale_vec->z;
+}
+
 void Model::renderModel()
 {
     glPushMatrix();
+
+    glTranslated(origin.x, origin.y, origin.z);
+
     // Rotaçao em x,y,z
     glRotated(rot_vec.x, 1, 0, 0);
     glRotated(rot_vec.y, 0, 1, 0);
     glRotated(rot_vec.z, 0, 0, 1);
 
-    glTranslated(origin.x, origin.y, origin.z);
-
-    // glScalef(20.0, 20.0, 20.0);
+    glScalef(scale.x, scale.y, scale.z);
     // Carrega todas as listas de exibição
     // glCallLists(this->cList.size(), GL_UNSIGNED_INT, this->cList.data());
     for (int i = 0; i < this->cList.size(); i++)
@@ -355,6 +367,10 @@ Model::Model()
 {
     this->origin = {0};
     this->rot_vec = {0};
+    this->scale = {
+        .x = 1.0f,
+        .y = 1.0f,
+        .z = 1.0f};
 }
 
 Model::~Model()

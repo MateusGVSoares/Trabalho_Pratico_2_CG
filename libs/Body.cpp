@@ -19,6 +19,32 @@ void solidSphere(int radius, int stacks, int columns)
     gluDeleteQuadric(quadObj);
 }
 
+Body::Body(vec3f_t origin,
+           double raio,
+           vec3f_t mov_center,
+           double ang_vel,
+           double transl_vel,
+           double elipse_a,
+           double elipse_b,
+           int n_luas,
+           bool interactWithSound,
+           bool interactWithLight)
+{
+    this->origin = origin;
+    this->raio = raio;
+
+    this->mov_center = mov_center;
+    this->ang_vel = ang_vel;
+    this->transl_vel = transl_vel;
+    this->elipse_a = elipse_a;
+    this->elipse_b = elipse_b;
+    this->interactWithLight = interactWithLight;
+    this->n_luas = n_luas;
+    this->interactWithSound = interactWithSound;
+    this->transl_angle = 0;
+    this->rot_angle = 0;
+}
+
 Body::Body(const char *tex_name,
            vec3f_t origin,
            double raio,
@@ -69,7 +95,7 @@ void Body::draw()
     // Rotaciona em torno do proprio eixo y
     // Y é o eixo para cima nas coordenadas do OpenGl, logo rotaciona no Y
     glRotatef(-this->rot_angle, 0, 1, 0);
-
+    glRotatef(90,1,0,0);
     // glColor3f(1.0, 1.0, 1.0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

@@ -6,6 +6,7 @@
 #include <GL/freeglut.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <math.h>
 
 // Development libs
 #include "libs/SolarSystem.h"
@@ -78,10 +79,10 @@ void drawUpdate()
     // Desenha todas as esferas
     sistemaSolar->updateOnDraw();
 
-    // Ta aqui de improviso, tem q arrumar um jeito de renderizar com os planetas
     glEnable(GL_LIGHTING);
     teste_model->renderModel();
     glDisable(GL_LIGHTING);
+
     // Clean Code <3
     // Swap buffers >_<
     glutSwapBuffers();
@@ -126,7 +127,7 @@ void onTimeUpdate(int param)
     {
         distance = calcDistance(&main_camera->origin, sistemaSolar->aux_sound[i]);
         // verifica a distância dos pontos q deve tocar som
-        if (distance <= 200.0f)
+        if (distance <= 100.0f)
         {
             playSound = true;
             break;
@@ -137,7 +138,7 @@ void onTimeUpdate(int param)
     if (playSound)
     {
         // Seta o volume de acordo com a distancia, para dar o efeito de fade
-        mainMixer->setVolume((200.0f - distance) / 2.0f);
+        mainMixer->setVolume((100.0f - distance) / 2.0f);
 
         // Resume a musica
         mainMixer->resumeMusic("ambiente");
@@ -151,7 +152,18 @@ void onTimeUpdate(int param)
             mainMixer->stopMusic();
         }
     }
+    vec3f_t mov{
+        .x = main_camera->origin.x + main_camera->direction.x,
+        .y = main_camera->origin.y + main_camera->direction.y - 5,
+        .z = main_camera->origin.z + main_camera->direction.z +10};
 
+    teste_model->moveModel(&mov);
+
+    // mov.x = -main_camera->rotation.x * 180.0f / M_PI;
+    // mov.y = -main_camera->rotation.y * 180.0f / M_PI;
+    // mov.z = -main_camera->rotation.z * 180.0f / M_PI;
+
+    // teste_model->rotateModel(&mov);
     glutPostRedisplay();
     glutTimerFunc(param, onTimeUpdate, param);
 }
@@ -160,7 +172,7 @@ void configGlut()
 {
     // Configura a janela da GLUT
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(600, 600 * 1 / razaoAspecto);
+    glutInitWindowSize(1000, 1000 * 1 / razaoAspecto);
 
     glutInitWindowPosition(0, 0);
     glutCreateWindow("Solar System");
@@ -193,7 +205,7 @@ void configOpenGl()
     // glDisable(GL_CULL_FACE);
 
     // Esconder o ponteiro do mouse quando dentro da janela
-    // glutSetCursor(GLUT_CURSOR_NONE);
+    glutSetCursor(GLUT_CURSOR_NONE);
 
     float globAmb[] = {0.15, 0.15, 0.15, 1.0};
 
@@ -221,14 +233,12 @@ void initGame()
     // Carrega a musica
     mainMixer->loadMusic("ambiente", "assets/music/default.mp3");
 
-    // Carrega o modelo
-    teste_model->loadModel("assets/models/Satellite_A.obj");
-
+    teste_model->loadModel("assets/models/sw_ship.obj");
     cam_origin.x = 150;
     cam_origin.y = 0;
     cam_origin.z = 150;
-    teste_model->moveModel(&cam_origin);
 
+    // teste_model->moveModel(&cam_origin);
     // mainMixer->playMusic("ambiente");
 }
 

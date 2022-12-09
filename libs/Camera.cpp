@@ -10,8 +10,9 @@ Camera::Camera(vec3f_t origin, double sense)
     this->sense = sense;
     this->direction = {0};
     this->origin = origin;
-    this->last_x=prev_ww*razaoAspecto/2;
-    this->last_y=prev_wh/2;
+    this->last_x = prev_ww * razaoAspecto / 2;
+    this->last_y = prev_wh / 2;
+    this->rotation = {0};
 }
 
 void Camera::updateCamera()
@@ -19,14 +20,17 @@ void Camera::updateCamera()
     // Câmera não faz rotação em torno do eixo Y, entao calculamos roll e pitch
     vec3f_t mouse_pointer = {0};
 
-    float offset_x = (x_mouse - last_x);
-    float offset_y = (y_mouse - last_y);
-    last_x = x_mouse;
-    last_y = y_mouse;
+    if (x_mouse != glutGet(GLUT_WINDOW_WIDTH) / 2 && y_mouse != glutGet(GLUT_WINDOW_HEIGHT) / 2)
+    {
 
-    // printf("Mouse vector : %f %f\n", mouse_pointer.x, mouse_pointer.y);
-    yaw += offset_x * sense;
-    pitch -= offset_y * sense;
+        float offset_x = (x_mouse - glutGet(GLUT_WINDOW_WIDTH) / 2.0);
+        float offset_y = (y_mouse - glutGet(GLUT_WINDOW_HEIGHT) / 2.0);
+
+        glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
+        // printf("Mouse vector : %f %f\n", mouse_pointer.x, mouse_pointer.y);
+        yaw += offset_x * sense;
+        pitch -= offset_y * sense;
+    }
 
     if (pitch > 90)
     {
@@ -36,6 +40,9 @@ void Camera::updateCamera()
     {
         pitch = -90;
     }
+    rotation.x = pitch;
+    rotation.y = yaw;
+    rotation.z = roll;
 
     // Obtem um vetor unitário,
     // com base em coordenadas esféricas para a direção que está sendo olhada na camêra
@@ -47,7 +54,6 @@ void Camera::updateCamera()
     side.x = -sin(yaw) * cos(pitch) * (keyboard.d - keyboard.a);
     side.y = 0;
     side.z = cos(yaw) * cos(pitch) * (keyboard.d - keyboard.a);
-
 
     // Para sempre ter a direção, apenas verifica se deve movimentar ou não em um vetor auxiliar
     mouse_pointer.x = (keyboard.w - keyboard.s) * direction.x;
