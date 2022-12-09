@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/panel_blue.png
+map_Kd assets/texture/satellite/panel_blue.png
 
 newmtl Material.002
 Ns 99.999988
@@ -21,7 +21,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metal_white.png
+map_Kd assets/texture/satellite/metal_white.png
 
 newmtl Material.004
 Ns 99.999988
@@ -32,7 +32,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metal_white.png
+map_Kd assets/texture/satellite/metal_white.png
 
 newmtl Material.006
 Ns 99.999988
@@ -43,4 +43,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /home/mateus/work/Trabalho_Pratico_2_CG/assets/texture/satellite/metal_white.png
+map_Kd assets/texture/satellite/metal_white.png

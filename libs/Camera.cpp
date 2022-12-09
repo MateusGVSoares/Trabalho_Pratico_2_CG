@@ -10,6 +10,8 @@ Camera::Camera(vec3f_t origin, double sense)
     this->sense = sense;
     this->direction = {0};
     this->origin = origin;
+    this->last_x=prev_ww*razaoAspecto/2;
+    this->last_y=prev_wh/2;
 }
 
 void Camera::updateCamera()
@@ -17,22 +19,22 @@ void Camera::updateCamera()
     // Câmera não faz rotação em torno do eixo Y, entao calculamos roll e pitch
     vec3f_t mouse_pointer = {0};
 
-    int w = glutGet(GLUT_WINDOW_WIDTH), h = glutGet(GLUT_WINDOW_HEIGHT);
-
-    mouse_pointer.x = (float)x_mouse / w - 0.5;
-    mouse_pointer.y = (float)y_mouse / h - 0.5;
+    float offset_x = (x_mouse - last_x);
+    float offset_y = (y_mouse - last_y);
+    last_x = x_mouse;
+    last_y = y_mouse;
 
     // printf("Mouse vector : %f %f\n", mouse_pointer.x, mouse_pointer.y);
-    yaw += mouse_pointer.x * sense;
-    pitch -= mouse_pointer.y * sense;
+    yaw += offset_x * sense;
+    pitch -= offset_y * sense;
 
-    if (pitch > 80)
+    if (pitch > 90)
     {
-        pitch = 80;
+        pitch = 90;
     }
-    else if (pitch < -80)
+    else if (pitch < -90)
     {
-        pitch = -80;
+        pitch = -90;
     }
 
     // Obtem um vetor unitário,

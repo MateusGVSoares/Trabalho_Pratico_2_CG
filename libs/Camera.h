@@ -13,6 +13,8 @@ private:
     double roll;  // Rotação no eixo X
     double yaw;   // Rotação no eixo y
     double sense;
+    double last_x;
+    double last_y;
     vec3f_t direction;
     vec3f_t side;
 

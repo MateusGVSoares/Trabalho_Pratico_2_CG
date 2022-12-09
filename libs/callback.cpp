@@ -18,6 +18,10 @@ void keyboardFct(unsigned char key, int x, int y)
     switch (key)
     {
 
+    //tecla esc sair do jogo
+    case 27:
+        exit(0);
+    
     case 13:
         if (keyboard.enter)
             keyboard.enter = 0;

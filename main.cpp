@@ -213,7 +213,7 @@ void initGame()
         .y = 300,
         .z = -300};
 
-    main_camera = new Camera(cam_origin, 0.1);
+    main_camera = new Camera(cam_origin, 0.004);
     sistemaSolar = new SolarSystem("solarsystem.sscp");
     mainMixer = new MusicPlayer();
     teste_model = new Model();
