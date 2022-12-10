@@ -321,7 +321,6 @@ void Model::loadModel(const char *fname)
 // Função para rotacionar o modelo
 void Model::rotateModel(vec3f_t *rot)
 {
-    printf("%f %f %f \n",rot->x,rot->y,rot->z);
     this->rot_vec.x = rot->x;
     this->rot_vec.y = rot->y;
     this->rot_vec.z = rot->z;
