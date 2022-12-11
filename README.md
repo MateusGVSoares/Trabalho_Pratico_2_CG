@@ -5,9 +5,12 @@
 -   Mateus Soares   - Matrícula : 20223303314
 -   Matheus Menezes - Matrícula : 20223003234
 -   Laura Pianetti  - Matrícula : 20223002424
--   Adjailson       - Matrícula : 20223002120
--   Lucas           - Matrícula : 20223002540
--   Gustavo         - Matrícula : 20223003379
+-   Adjailson Freire- Matrícula : 20223002120
+-   Lucas Andrade   - Matrícula : 20223002540
+-   Gustavo  Xavier - Matrícula : 20223003379
+
+## Link da apresentação:
+- https://youtu.be/7R92L4rKAgY
 
 ## Bibliotecas Necessárias:
 
